@@ -163,6 +163,8 @@ async def get_users():
 @api_router.post("/inventions", response_model=Invention)
 async def create_invention(invention: InventionCreate):
     invention_dict = invention.dict()
+    # Add a generated creator_id for now (in real app, this would come from auth)
+    invention_dict["creator_id"] = "user_" + str(uuid.uuid4())[:8]
     invention_obj = Invention(**invention_dict)
     await db.inventions.insert_one(invention_obj.dict())
     return invention_obj
